@@ -1,6 +1,6 @@
 \name{radarchart}
 \alias{radarchart}
-\title{Drawing radar chart (a.k.a. spider plot)}
+\title{Drawing radar chart (a.k.a. spider plot, kiviat diagram)}
 \description{
  Drawing the radar chart with several lines from a data frame, 
  which must be composed of more than 3 variables as axes and the 
@@ -9,7 +9,7 @@
 \usage{
  radarchart(df, axistype, seg, pty, pcol, plty, plwd, pdensity, pangle, pfcol, 
  cglty, cglwd, cglcol, axislabcol, title, maxmin, na.itp, centerzero, 
- vlabels, vlcex, caxislabels, calcex, paxislabels, palcex, ...)
+ vlabels, vlcex, caxislabels, calcex, paxislabels, palcex, cgfcol, cgdensity ...)
 }
 \arguments{
  \item{df}{The data frame to be used to draw radarchart.  If maxmin is TRUE, this must include maximum values as row 1 and minimum values as row 2 for each variables, and actual data should be given as row 3 and lower rows.  The number of columns (variables) must be more than 2.}
@@ -36,6 +36,8 @@
  \item{calcex}{Font size magnification for caxislabels.  If NULL, the font size is fixed at text()'s default.  Default NULL.}
  \item{paxislabels}{Character vector for around-the-chart (peripheral) labels, overwriting values specified in axistype option.  If NULL, the values specified by axistype option are used. Default is NULL.}
  \item{palcex}{Font size magnification for paxislabels.  If NULL, the font size is fixed at text()'s default.  Default NULL.}
+ \item{cgfcol}{The vector of background colours used to colour in each spoke. The vector must contain as many elements as there are spokes. If NULL no background colour is used. Default NULL.}
+ \item{cgdensity}{A vector of filling densities of background polygon spokes: Default NULL, which is repeatedly used.}
  \item{...}{Miscellaneous arguments to be given for plot.default().}
 }
 \value{
@@ -60,7 +62,7 @@ dat <- data.frame(
  social=runif(3, 1, 5),
  env=c(5, 2.5, 4))
 dat <- rbind(maxmin,dat)
-op <- par(mar=c(1, 2, 2, 1),mfrow=c(2, 2))
+op <- par(mar=c(1, 2, 2, 1),mfrow=c(2, 3))
 radarchart(dat, axistype=1, seg=5, plty=1, vlabels=c("Total\nQOL", "Physical\naspects", 
  "Phychological\naspects", "Social\naspects", "Environmental\naspects"), 
  title="(axis=1, 5 segments, with specified vlabels)", vlcex=0.5)
@@ -72,5 +74,10 @@ radarchart(dat, axistype=3, pty=32, plty=1, axislabcol="grey", na.itp=FALSE,
 radarchart(dat, axistype=1, plwd=1:5, pcol=1, centerzero=TRUE, 
  seg=4, caxislabels=c("worst", "", "", "", "best"),
  title="(use lty and lwd but b/w, axis=1,\n centerzero=TRUE, with centerlabels)")
+radarchart(dat, axistype=1, seg=5, plty=1, vlabels=c("Total\nQOL", "Physical\naspects", 
+ "Phychological\naspects", "Social\naspects", "Environmental\naspects"),
+ cgfcol=c(rep(rgb(0, 0, 255, 127, maxColorValue=255),2),rep(rgb(0, 255, 0, 127, maxColorValue=255),3))
+ cgdensity=rep(45,5),
+ title="(axis=1, 5 segments, with specified vlabels)", vlcex=0.5)
 par(op)
 }

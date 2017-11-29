@@ -330,7 +330,7 @@ radarchart <- function(df, axistype=0, seg=4, pty=16, pcol=1:8, plty=1:6, plwd=1
                        pdensity=NULL, pangle=45, pfcol=NA, cglty=3, cglwd=1,
                        cglcol="navy", axislabcol="blue", title="", maxmin=TRUE,
                        na.itp=TRUE, centerzero=FALSE, vlabels=NULL, vlcex=NULL,
-                       caxislabels=NULL, calcex=NULL,
+                       caxislabels=NULL, calcex=NULL, cgfcol=NA, cgdensity=NULL,
                        paxislabels=NULL, palcex=NULL, ...) {
   if (!is.data.frame(df)) { cat("The data must be given as dataframe.\n"); return() }
   if ((n <- length(df))<3) { cat("The number of variables must be 3 or more.\n"); return() }
@@ -346,6 +346,22 @@ radarchart <- function(df, axistype=0, seg=4, pty=16, pcol=1:8, plty=1:6, plwd=1
   xx <- cos(theta)
   yy <- sin(theta)
   CGap <- ifelse(centerzero, 0, 1)
+
+  #colour in background spokes
+  h_theta <- seq(80, 440, length=n+1)*pi/180
+  h_theta <- h_theta[1:n]
+  h_xx <- cos(h_theta)
+  h_yy <- sin(h_theta)
+  for (j in 1:n) {
+      left <- j
+      right <- ifelse(j<n, j+1, 1)
+      xxleft <-  h_xx[left]
+      yyleft <-  h_yy[left]
+      xxright <- h_xx[right]
+      yyright <- h_yy[right]
+      polygon(c(xxleft,xxright,0), c(yyleft,yyright,0), col=cgfcol[j], density=cgdensity[j],border=NA)
+  }
+
   for (i in 0:seg) { # complementary guide lines, dotted navy line by default
     polygon(xx*(i+CGap)/(seg+CGap), yy*(i+CGap)/(seg+CGap), lty=cglty, lwd=cglwd, border=cglcol)
     if (axistype==1|axistype==3) CAXISLABELS <- paste(i/seg*100,"(%)")
