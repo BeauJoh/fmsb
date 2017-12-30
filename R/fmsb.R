@@ -348,7 +348,7 @@ radarchart <- function(df, axistype=0, seg=4, pty=16, pcol=1:8, plty=1:6, plwd=1
   CGap <- ifelse(centerzero, 0, 1)
 
   #colour in background spokes
-  h_theta <- seq(80, 440, length=n+1)*pi/180
+  h_theta <- seq(90, 450, length=n+1)*pi/180 - (2*pi)/n
   h_theta <- h_theta[1:n]
   h_xx <- cos(h_theta)
   h_yy <- sin(h_theta)
